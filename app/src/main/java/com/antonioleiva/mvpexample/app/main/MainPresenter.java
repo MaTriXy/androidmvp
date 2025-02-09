@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright (C) 2014 Antonio Leiva Gordillo.
+ *  * Copyright (C) 2018 Antonio Leiva Gordillo.
  *  *
  *  * Licensed under the Apache License, Version 2.0 (the "License");
  *  * you may not use this file except in compliance with the License.
@@ -18,11 +18,44 @@
 
 package com.antonioleiva.mvpexample.app.main;
 
-public interface MainPresenter {
+import java.util.List;
 
-    void onResume();
+class MainPresenter {
 
-    void onItemClicked(int position);
+    private MainView mainView;
+    private FindItemsInteractor findItemsInteractor;
 
-    void onDestroy();
+    MainPresenter(MainView mainView, FindItemsInteractor findItemsInteractor) {
+        this.mainView = mainView;
+        this.findItemsInteractor = findItemsInteractor;
+    }
+
+    void onResume() {
+        if (mainView != null) {
+            mainView.showProgress();
+        }
+
+        findItemsInteractor.findItems(this::onFinished);
+    }
+
+    void onItemClicked(String item) {
+        if (mainView != null) {
+            mainView.showMessage(String.format("%s clicked", item));
+        }
+    }
+
+    void onDestroy() {
+        mainView = null;
+    }
+
+    public void onFinished(List<String> items) {
+        if (mainView != null) {
+            mainView.setItems(items);
+            mainView.hideProgress();
+        }
+    }
+
+    public MainView getMainView() {
+        return mainView;
+    }
 }

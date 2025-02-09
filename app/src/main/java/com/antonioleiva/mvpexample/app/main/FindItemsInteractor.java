@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright (C) 2014 Antonio Leiva Gordillo.
+ *  * Copyright (C) 2018 Antonio Leiva Gordillo.
  *  *
  *  * Licensed under the Apache License, Version 2.0 (the "License");
  *  * you may not use this file except in compliance with the License.
@@ -18,13 +18,33 @@
 
 package com.antonioleiva.mvpexample.app.main;
 
+import android.os.Handler;
+
+import java.util.Arrays;
 import java.util.List;
 
-public interface FindItemsInteractor {
+public class FindItemsInteractor {
 
     interface OnFinishedListener {
         void onFinished(List<String> items);
     }
 
-    void findItems(OnFinishedListener listener);
+    public void findItems(final OnFinishedListener listener) {
+        new Handler().postDelayed(() -> listener.onFinished(createArrayList()), 2000);
+    }
+
+    private List<String> createArrayList() {
+        return Arrays.asList(
+                "Item 1",
+                "Item 2",
+                "Item 3",
+                "Item 4",
+                "Item 5",
+                "Item 6",
+                "Item 7",
+                "Item 8",
+                "Item 9",
+                "Item 10"
+        );
+    }
 }
